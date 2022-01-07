@@ -94,6 +94,29 @@ export class ArticlesService {
     return { articles, articlesCount };
   }
 
+  async findFeed(userId: number, query): Promise<any> {
+    const where = {
+      author: {
+        followedBy: { some: { id: +userId } },
+      },
+    };
+    let articles = await this.prisma.article.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      include: articleInclude,
+      ...('limit' in query ? { take: +query.limit } : {}),
+      ...('offset' in query ? { skip: +query.offset } : {}),
+    });
+    const articlesCount = await this.prisma.article.count({
+      where,
+      orderBy: { createdAt: 'desc' },
+    });
+
+    articles = (articles as any).map((a) => mapDynamicValues(userId, a));
+
+    return { articles, articlesCount };
+  }
+
   async create(userId: number, payload: CreateArticleDto): Promise<any> {
     const data = {
       ...payload,

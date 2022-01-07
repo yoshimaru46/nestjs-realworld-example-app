@@ -25,4 +25,13 @@ export class ArticlesController {
   ) {
     return this.articleService.create(userId, articleData);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('feed')
+  async getFeed(
+    @User('userId') userId: number,
+    @Query() query,
+  ): Promise<ArticlesRO> {
+    return await this.articleService.findFeed(userId, query);
+  }
 }
