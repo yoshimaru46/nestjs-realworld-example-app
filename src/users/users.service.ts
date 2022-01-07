@@ -9,7 +9,7 @@ const select = {
   email: true,
   username: true,
   bio: true,
-  // image: true,
+  image: true,
 };
 
 @Injectable()
