@@ -58,7 +58,7 @@ export class ArticlesController {
     @Param('slug') slug,
     @Body('article') articleData: CreateArticleDto,
   ) {
-    // Todo: update slug also when title gets changed
+    // TODO: update slug also when title gets changed
     return this.articleService.update(userId, slug, articleData);
   }
 }
