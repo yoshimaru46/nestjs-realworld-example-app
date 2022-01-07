@@ -45,7 +45,7 @@ export class ArticlesService {
     if ('tag' in query) {
       queries.push({
         tagList: {
-          contains: query.tag,
+          has: query.tag,
         },
       });
     }
