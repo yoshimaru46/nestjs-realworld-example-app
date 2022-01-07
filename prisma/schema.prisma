@@ -11,11 +11,13 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  username String
-  password String
-  bio      String?
-  image    String?
-  token    String?
+  id         Int     @id @default(autoincrement())
+  email      String  @unique
+  username   String? @unique
+  password   String
+  bio        String?
+  image      String?
+  token      String?
+  followedBy User[]  @relation("UserFollows", references: [id])
+  following  User[]  @relation("UserFollows", references: [id])
 }
