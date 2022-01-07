@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
@@ -17,7 +16,7 @@ const select = {
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
+  constructor(private prisma: PrismaService) {}
 
   async login(payload: LoginUserDto): Promise<any> {
     const _user = await this.prisma.user.findUnique({
@@ -36,20 +35,11 @@ export class UsersService {
       throw new HttpException({ errors }, 401);
     }
 
-    const token = this.jwtService.sign({ sub: _user.id, email: _user.email });
-
-    await this.prisma.user.update({
-      where: { id: _user.id },
-      data: { token },
-    });
-
     // delete password
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...user } = _user;
 
-    return {
-      user: { token, ...user },
-    };
+    return { user };
   }
 
   async create(dto: CreateUserDto): Promise<UserRO> {
@@ -81,7 +71,7 @@ export class UsersService {
   async findByEmail(email: string): Promise<any> {
     const user = await this.prisma.user.findUnique({
       where: { email },
-      select,
+      select: { ...select, password: true },
     });
     return { user };
   }

@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { LoginUserDto } from 'src/users/dto/login-user.dto';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { UserRO } from 'src/users/users.interface';
 import { UsersService } from 'src/users/users.service';
@@ -24,15 +23,6 @@ export class UsersController {
     userData: CreateUserDto,
   ) {
     return this.userService.create(userData);
-  }
-
-  // Authentication
-  @Post('users/login')
-  async login(
-    @Body('user')
-    loginUserDto: LoginUserDto,
-  ): Promise<UserRO> {
-    return this.userService.login(loginUserDto);
   }
 
   // Get Current User
