@@ -19,6 +19,16 @@ export class AuthService {
     return null;
   }
 
+  async findUserByEmail(email: string): Promise<any> {
+    const { user } = await this.usersService.findByEmail(email);
+    if (user) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
+  }
+
   async login(user: any) {
     const payload = { email: user.email, sub: user.userId };
     return {
