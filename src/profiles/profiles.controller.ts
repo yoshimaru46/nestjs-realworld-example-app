@@ -1,4 +1,12 @@
-import { Controller, Get, Param, Request, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ProfileRO } from 'src/profiles/profiles.interface';
 import { ProfilesService } from 'src/profiles/profiles.service';
@@ -15,5 +23,25 @@ export class ProfilesController {
   ): Promise<ProfileRO> {
     const { userId } = req.user;
     return await this.profileService.findProfile(userId, username);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':username/follow')
+  async follow(
+    @Request() req,
+    @Param('username') username: string,
+  ): Promise<ProfileRO> {
+    const { userId } = req.user;
+    return await this.profileService.follow(userId, username);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':username/follow')
+  async unFollow(
+    @Request() req,
+    @Param('username') username: string,
+  ): Promise<ProfileRO> {
+    const { userId } = req.user;
+    return await this.profileService.unFollow(userId, username);
   }
 }
