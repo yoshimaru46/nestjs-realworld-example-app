@@ -10,16 +10,6 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne({ email });
-    // TODO - Use encrypted password
-    if (user && user.password === pass) {
-      const { email, ...result } = user;
-      return result;
-    }
-    return null;
-  }
-
   async register(user: Prisma.UserCreateInput) {
     const createdUser = await this.usersService.createUser(user);
     return {
