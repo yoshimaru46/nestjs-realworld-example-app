@@ -37,6 +37,7 @@ export class UsersService {
     const token = this.jwtService.sign({ sub: _user.id, email: _user.email });
 
     // delete password
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...user } = _user;
 
     return {
