@@ -29,7 +29,7 @@
 ## Installation
 
 ```bash
-$ npm install
+npm install
 ```
 
 ## Running the app
@@ -56,6 +56,12 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
+```
+
+## API tests
+
+```bash
+APIURL=http://localhost:3000/api ./run-api-tests.sh
 ```
 
 ## Support
