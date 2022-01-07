@@ -11,13 +11,29 @@ datasource db {
 }
 
 model User {
-  id         Int     @id @default(autoincrement())
-  email      String  @unique
-  username   String? @unique
+  id         Int       @id @default(autoincrement())
+  email      String    @unique
+  username   String?   @unique
   password   String
   bio        String?
   image      String?
   token      String?
-  followedBy User[]  @relation("UserFollows", references: [id])
-  following  User[]  @relation("UserFollows", references: [id])
+  articles   Article[] @relation("UserArticles")
+  favorites  Article[] @relation("UserFavorites", references: [id])
+  followedBy User[]    @relation("UserFollows", references: [id])
+  following  User[]    @relation("UserFollows", references: [id])
+}
+
+model Article {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  title       String
+  description String
+  body        String
+  tagList     String[]
+  author      User     @relation("UserArticles", fields: [authorId], references: [id])
+  authorId    Int
+  favoritedBy User[]   @relation("UserFavorites", references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
 }
