@@ -6,6 +6,7 @@ import { LoginUserDto } from 'src/users/dto/login-user.dto';
 import { UserRO } from 'src/users/users.interface';
 
 const select = {
+  id: true,
   email: true,
   username: true,
   bio: true,
@@ -64,14 +65,21 @@ export class UsersService {
       email,
       password, // TODO make hashed
     };
-    const _select = {
-      id: true,
-      ...select,
-    };
-    const user = await this.prisma.user.create({ data, select: _select });
+    const user = await this.prisma.user.create({ data, select });
 
     const token = this.jwtService.sign({ sub: user.id, email: user.email });
 
+    return {
+      user: { token, ...user },
+    };
+  }
+
+  async findByEmail(email: string): Promise<any> {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+      select,
+    });
+    const token = this.jwtService.sign({ sub: user.id, email: user.email });
     return {
       user: { token, ...user },
     };
