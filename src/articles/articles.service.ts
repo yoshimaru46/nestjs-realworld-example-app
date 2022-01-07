@@ -117,6 +117,17 @@ export class ArticlesService {
     return { articles, articlesCount };
   }
 
+  async findOne(userId: number, slug: string): Promise<any> {
+    let article: any = await this.prisma.article.findUnique({
+      where: { slug },
+      include: articleInclude,
+    });
+
+    article = mapDynamicValues(userId, article);
+
+    return { article };
+  }
+
   async create(userId: number, payload: CreateArticleDto): Promise<any> {
     const data = {
       ...payload,
