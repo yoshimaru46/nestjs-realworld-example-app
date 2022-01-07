@@ -147,6 +147,21 @@ export class ArticlesService {
     return { article };
   }
 
+  async update(userId: number, slug: string, data: any): Promise<any> {
+    let article: any = await this.prisma.article.update({
+      where: { slug },
+      data: {
+        ...data,
+        updatedAt: new Date(),
+      },
+      include: articleInclude,
+    });
+
+    article = mapDynamicValues(userId, article);
+
+    return { article };
+  }
+
   private slugify(title: string) {
     return (
       slugify(title, { replacement: '-', lower: true, trim: true }) +

@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -49,5 +50,15 @@ export class ArticlesController {
     @Param('slug') slug,
   ): Promise<ArticleRO> {
     return await this.articleService.findOne(userId, slug);
+  }
+
+  @Put(':slug')
+  async update(
+    @User('userId') userId: number,
+    @Param('slug') slug,
+    @Body('article') articleData: CreateArticleDto,
+  ) {
+    // Todo: update slug also when title gets changed
+    return this.articleService.update(userId, slug, articleData);
   }
 }
