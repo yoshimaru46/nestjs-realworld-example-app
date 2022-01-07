@@ -17,4 +17,5 @@ model User {
   password String
   bio      String?
   image    String?
+  token    String?
 }

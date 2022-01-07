@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { UserRO } from 'src/users/users.interface';
 
 const select = {
@@ -11,6 +12,7 @@ const select = {
   username: true,
   bio: true,
   image: true,
+  token: true,
 };
 
 @Injectable()
@@ -35,6 +37,11 @@ export class UsersService {
     }
 
     const token = this.jwtService.sign({ sub: _user.id, email: _user.email });
+
+    await this.prisma.user.update({
+      where: { id: _user.id },
+      data: { token },
+    });
 
     // delete password
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -68,11 +75,7 @@ export class UsersService {
     };
     const user = await this.prisma.user.create({ data, select });
 
-    const token = this.jwtService.sign({ sub: user.id, email: user.email });
-
-    return {
-      user: { token, ...user },
-    };
+    return { user };
   }
 
   async findByEmail(email: string): Promise<any> {
@@ -80,9 +83,13 @@ export class UsersService {
       where: { email },
       select,
     });
-    const token = this.jwtService.sign({ sub: user.id, email: user.email });
-    return {
-      user: { token, ...user },
-    };
+    return { user };
+  }
+
+  async update(id: number, data: UpdateUserDto) {
+    const where = { id };
+    const user = await this.prisma.user.update({ where, data, select });
+
+    return { user };
   }
 }
