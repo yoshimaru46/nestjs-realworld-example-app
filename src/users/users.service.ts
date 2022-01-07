@@ -1,22 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
+import { LoginUserDto } from 'src/users/dto/login-user.dto';
+import { RegisterUserDto } from 'src/users/dto/register-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async findOne(
-    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-  ): Promise<User | undefined> {
-    return this.prisma.user.findUnique({
-      where: userWhereUniqueInput,
+    userWhereInput: Prisma.UserWhereInput,
+  ): Promise<LoginUserDto | undefined> {
+    const user = await this.prisma.user.findFirst({
+      where: userWhereInput,
     });
+    return {
+      ...user,
+      image: 'TODO', // TODO
+      token: null,
+    };
   }
 
-  async createUser(data: Prisma.UserCreateInput): Promise<User> {
-    return this.prisma.user.create({
+  async createUser(data: Prisma.UserCreateInput): Promise<RegisterUserDto> {
+    const user = await this.prisma.user.create({
       data,
     });
+
+    return {
+      ...user,
+      image: null,
+      token: null,
+    };
   }
 }
