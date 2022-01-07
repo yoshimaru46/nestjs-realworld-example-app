@@ -124,6 +124,23 @@ export class ArticlesService {
     return { article };
   }
 
+  async favorite(userId: number, slug: string): Promise<any> {
+    let article: any = await this.prisma.article.update({
+      where: { slug },
+      data: {
+        favoritedBy: {
+          connect: { id: userId },
+        },
+        updatedAt: new Date(),
+      },
+      include: articleInclude,
+    });
+
+    article = mapDynamicValues(userId, article);
+
+    return { article };
+  }
+
   private buildFindAllQuery(
     query,
   ): Prisma.Enumerable<Prisma.ArticleWhereInput> {

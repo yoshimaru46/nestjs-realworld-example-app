@@ -52,6 +52,7 @@ export class ArticlesController {
     return await this.articleService.findOne(userId, slug);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':slug')
   async update(
     @User('userId') userId: number,
@@ -60,5 +61,13 @@ export class ArticlesController {
   ) {
     // TODO: update slug also when title gets changed
     return this.articleService.update(userId, slug, articleData);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':slug/favorite')
+  async favorite(@User('userId') userId: number, @Param('slug') slug) {
+    console.log({ userId, slug });
+
+    return this.articleService.favorite(userId, slug);
   }
 }
