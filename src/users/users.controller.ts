@@ -37,7 +37,6 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get('user')
   async findMe(@Request() req): Promise<UserRO> {
-    console.log('req.user', req.user);
     return await this.userService.findByEmail(req.user.email);
   }
 }
