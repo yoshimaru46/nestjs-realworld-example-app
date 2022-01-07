@@ -64,8 +64,16 @@ export class UsersService {
       email,
       password, // TODO make hashed
     };
-    const user = await this.prisma.user.create({ data, select });
+    const _select = {
+      id: true,
+      ...select,
+    };
+    const user = await this.prisma.user.create({ data, select: _select });
 
-    return { user };
+    const token = this.jwtService.sign({ sub: user.id, email: user.email });
+
+    return {
+      user: { token, ...user },
+    };
   }
 }
