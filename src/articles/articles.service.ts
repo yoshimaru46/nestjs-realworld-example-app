@@ -37,44 +37,6 @@ const mapDynamicValues = (userId, { favoritedBy, author, ...rest }) => ({
 export class ArticlesService {
   constructor(private prisma: PrismaService) {}
 
-  private buildFindAllQuery(
-    query,
-  ): Prisma.Enumerable<Prisma.ArticleWhereInput> {
-    const queries = [];
-
-    if ('tag' in query) {
-      queries.push({
-        tagList: {
-          has: query.tag,
-        },
-      });
-    }
-
-    if ('author' in query) {
-      queries.push({
-        author: {
-          username: {
-            equals: query.author,
-          },
-        },
-      });
-    }
-
-    if ('favorited' in query) {
-      queries.push({
-        favoritedBy: {
-          some: {
-            username: {
-              equals: query.favorited,
-            },
-          },
-        },
-      });
-    }
-
-    return queries;
-  }
-
   async findAll(userId: number, query): Promise<any> {
     const andQueries = this.buildFindAllQuery(query);
     let articles = await this.prisma.article.findMany({
@@ -160,6 +122,44 @@ export class ArticlesService {
     article = mapDynamicValues(userId, article);
 
     return { article };
+  }
+
+  private buildFindAllQuery(
+    query,
+  ): Prisma.Enumerable<Prisma.ArticleWhereInput> {
+    const queries = [];
+
+    if ('tag' in query) {
+      queries.push({
+        tagList: {
+          has: query.tag,
+        },
+      });
+    }
+
+    if ('author' in query) {
+      queries.push({
+        author: {
+          username: {
+            equals: query.author,
+          },
+        },
+      });
+    }
+
+    if ('favorited' in query) {
+      queries.push({
+        favoritedBy: {
+          some: {
+            username: {
+              equals: query.favorited,
+            },
+          },
+        },
+      });
+    }
+
+    return queries;
   }
 
   private slugify(title: string) {
