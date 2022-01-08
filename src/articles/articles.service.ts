@@ -124,6 +124,12 @@ export class ArticlesService {
     return { article };
   }
 
+  async delete(slug: string): Promise<any> {
+    await this.prisma.article.delete({
+      where: { slug },
+    });
+  }
+
   async favorite(userId: number, slug: string): Promise<any> {
     let article: any = await this.prisma.article.update({
       where: { slug },

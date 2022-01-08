@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -61,6 +62,12 @@ export class ArticlesController {
   ) {
     // TODO: update slug also when title gets changed
     return this.articleService.update(userId, slug, articleData);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':slug')
+  async delete(@Param('slug') slug) {
+    return this.articleService.delete(slug);
   }
 
   @UseGuards(JwtAuthGuard)
