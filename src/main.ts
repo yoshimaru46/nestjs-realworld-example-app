@@ -6,7 +6,6 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.enableCors({
     origin: '*',
-    allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
   });
   await app.listen(process.env.PORT || 3000);
 }
