@@ -7,7 +7,24 @@ on:
 
 jobs:
   newman_test:
-    runs-on: ubuntu-latest
+    runs-on:
+      ubuntu-latest
+      # Service containers to run with `container-job`
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/mydb
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -16,6 +33,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '14.x'
+
+      - name: Run migration
+        run: npx prisma migrate deploy
 
       - name: Run Application
         run: yarn build && yarn start:prod
