@@ -50,3 +50,8 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+}
