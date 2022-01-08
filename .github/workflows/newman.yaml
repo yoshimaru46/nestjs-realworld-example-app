@@ -40,13 +40,10 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Run Application
-        run: yarn build && yarn start:prod
-
       - name: newman install
         run: sudo npm install -g newman
 
       - name: E2E Tests
-        run: ./run-api-tests.sh
+        run: yarn build && yarn start:prod && ./run-api-tests.sh
         env:
           APIURL: http://localhost:3000/api
