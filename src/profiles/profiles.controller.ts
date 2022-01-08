@@ -2,6 +2,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Request,
@@ -27,6 +28,7 @@ export class ProfilesController {
 
   @UseGuards(JwtAuthGuard)
   @Post(':username/follow')
+  @HttpCode(200)
   async follow(
     @Request() req,
     @Param('username') username: string,
