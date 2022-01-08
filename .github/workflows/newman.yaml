@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+
 jobs:
   newman_test:
     runs-on: ubuntu-latest
