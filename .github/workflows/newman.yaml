@@ -5,7 +5,7 @@ on:
     branches:
       - master
 jobs:
-  newman:
+  newman_test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
