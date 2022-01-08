@@ -47,6 +47,6 @@ jobs:
         run: sudo npm install -g newman
 
       - name: E2E Tests
-        run: yarn build && yarn start:prod && ./run-api-tests.sh
+        run: ./run-api-tests.sh
         env:
           APIURL: http://localhost:3000/api
