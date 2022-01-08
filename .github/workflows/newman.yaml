@@ -37,8 +37,8 @@ jobs:
       - name: Run migration
         run: npx prisma migrate deploy
 
-      - name: Install rimraf
-        run: sudo npm install -g rimraf
+      - name: Install dependencies
+        run: yarn install
 
       - name: Run Application
         run: yarn build && yarn start:prod
