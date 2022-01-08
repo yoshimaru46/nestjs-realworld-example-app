@@ -91,4 +91,10 @@ export class ArticlesController {
   async getComments(@Param('slug') slug) {
     return await this.articleService.getComments(slug);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':slug/comments/:commentId')
+  async deleteComment(@Param('slug') slug, @Param('commentId') commentId) {
+    return await this.articleService.deleteComment(slug, commentId);
+  }
 }

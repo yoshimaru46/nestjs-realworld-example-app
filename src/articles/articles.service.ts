@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import slugify from 'slugify';
 import { CreateArticleDto } from 'src/articles/dto/create-article.dto';
@@ -180,6 +180,17 @@ export class ArticlesService {
     });
 
     return { comments };
+  }
+
+  async deleteComment(_slug: string, commentId: number): Promise<any> {
+    const comment = await this.prisma.comment
+      .delete({
+        where: { id: +commentId },
+      })
+      .catch((e) => {
+        throw new HttpException(e.message, HttpStatus.UNPROCESSABLE_ENTITY);
+      });
+    return { comment };
   }
 
   private buildFindAllQuery(
