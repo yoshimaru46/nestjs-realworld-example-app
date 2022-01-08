@@ -38,18 +38,15 @@ jobs:
         run: npx prisma migrate deploy
 
       - name: Install rimraf
-        if: contains(github.event_name, 'push')
         run: sudo npm install -g rimraf
 
       - name: Run Application
         run: yarn build && yarn start:prod
 
       - name: newman install
-        if: contains(github.event_name, 'push')
         run: sudo npm install -g newman
 
       - name: E2E Tests
-        if: contains(github.event_name, 'push')
         run: ./run-api-tests.sh
         env:
           APIURL: http://localhost:3000/api
