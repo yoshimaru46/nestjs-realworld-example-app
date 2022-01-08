@@ -17,6 +17,9 @@ jobs:
         with:
           node-version: '14.x'
 
+      - name: Run Application
+        run: yarn build && yarn start:prod
+
       - name: newman install
         if: contains(github.event_name, 'push')
         run: sudo npm install -g newman
