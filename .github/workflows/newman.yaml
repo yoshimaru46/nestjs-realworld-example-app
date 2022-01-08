@@ -37,6 +37,10 @@ jobs:
       - name: Run migration
         run: npx prisma migrate deploy
 
+      - name: Install rimraf
+        if: contains(github.event_name, 'push')
+        run: sudo npm install -g rimraf
+
       - name: Run Application
         run: yarn build && yarn start:prod
 
