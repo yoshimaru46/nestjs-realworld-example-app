@@ -16,6 +16,7 @@ import { ProfilesService } from 'src/profiles/profiles.service';
 export class ProfilesController {
   constructor(private readonly profileService: ProfilesService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get(':username')
   async getProfile(
     @Request() req,
