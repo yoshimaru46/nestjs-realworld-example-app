@@ -3,7 +3,7 @@ name: newman
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   newman_test:
