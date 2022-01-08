@@ -78,6 +78,12 @@ export class ArticlesController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Delete(':slug/favorite')
+  async unFavorite(@User('userId') userId: number, @Param('slug') slug) {
+    return this.articleService.unFavorite(userId, slug);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post(':slug/comments')
   async createComment(
     @User('userId') userId: number,

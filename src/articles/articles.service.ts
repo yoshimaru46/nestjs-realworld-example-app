@@ -118,7 +118,7 @@ export class ArticlesService {
   }
 
   async update(userId: number, slug: string, data: any): Promise<any> {
-    let article: any = await this.prisma.article.update({
+    const article: any = await this.prisma.article.update({
       where: { slug },
       data: {
         ...data,
@@ -127,9 +127,7 @@ export class ArticlesService {
       include: articleInclude,
     });
 
-    article = mapDynamicValues(userId, article);
-
-    return { article };
+    return { article: mapDynamicValues(userId, article) };
   }
 
   async delete(slug: string): Promise<any> {
@@ -139,7 +137,7 @@ export class ArticlesService {
   }
 
   async favorite(userId: number, slug: string): Promise<any> {
-    let article: any = await this.prisma.article.update({
+    const article: any = await this.prisma.article.update({
       where: { slug },
       data: {
         favoritedBy: {
@@ -150,9 +148,22 @@ export class ArticlesService {
       include: articleInclude,
     });
 
-    article = mapDynamicValues(userId, article);
+    return { article: mapDynamicValues(userId, article) };
+  }
 
-    return { article };
+  async unFavorite(userId: number, slug: string) {
+    const article = await this.prisma.article.update({
+      where: { slug },
+      data: {
+        favoritedBy: {
+          disconnect: { id: userId },
+        },
+        updatedAt: new Date(),
+      },
+      include: articleInclude,
+    });
+
+    return { article: mapDynamicValues(userId, article) };
   }
 
   async addComment(userId: number, slug: string, body: string): Promise<any> {
