@@ -5,8 +5,10 @@ on:
     branches:
       - master
 jobs:
-  aws_cdk:
+  newman:
     runs-on: ubuntu-latest
+     env:
+      APIURL: http://localhost:3000/api
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -22,4 +24,4 @@ jobs:
 
       - name: E2E Tests
         if: contains(github.event_name, 'push')
-        run APIURL=http://localhost:3000/api ./run-api-tests.sh
+        run ./run-api-tests.sh
