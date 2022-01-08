@@ -86,4 +86,9 @@ export class ArticlesController {
   ) {
     return await this.articleService.addComment(userId, slug, payload.body);
   }
+
+  @Get(':slug/comments')
+  async getComments(@Param('slug') slug) {
+    return await this.articleService.getComments(slug);
+  }
 }

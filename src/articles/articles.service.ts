@@ -170,6 +170,17 @@ export class ArticlesService {
     });
     return { comment };
   }
+  async getComments(slug: string): Promise<any> {
+    const comments = await this.prisma.comment.findMany({
+      where: { article: { slug } },
+      orderBy: { createdAt: 'asc' },
+      include: {
+        author: { select: articleAuthorSelect },
+      },
+    });
+
+    return { comments };
+  }
 
   private buildFindAllQuery(
     query,
