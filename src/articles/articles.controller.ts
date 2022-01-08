@@ -12,6 +12,7 @@ import {
 import { ArticleRO, ArticlesRO } from 'src/articles/articles.interface';
 import { ArticlesService } from 'src/articles/articles.service';
 import { CreateArticleDto } from 'src/articles/dto/create-article.dto';
+import { CreateCommentDto } from 'src/articles/dto/create-comment';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { User } from 'src/users/users.decorator';
 
@@ -73,8 +74,16 @@ export class ArticlesController {
   @UseGuards(JwtAuthGuard)
   @Post(':slug/favorite')
   async favorite(@User('userId') userId: number, @Param('slug') slug) {
-    console.log({ userId, slug });
-
     return this.articleService.favorite(userId, slug);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post(':slug/comments')
+  async createComment(
+    @User('userId') userId: number,
+    @Param('slug') slug,
+    @Body('comment') payload: CreateCommentDto,
+  ) {
+    return await this.articleService.addComment(userId, slug, payload.body);
   }
 }

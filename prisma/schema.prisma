@@ -22,18 +22,31 @@ model User {
   favorites  Article[] @relation("UserFavorites", references: [id])
   followedBy User[]    @relation("UserFollows", references: [id])
   following  User[]    @relation("UserFollows", references: [id])
+  Comment    Comment[]
 }
 
 model Article {
-  id          Int      @id @default(autoincrement())
-  slug        String   @unique
+  id          Int       @id @default(autoincrement())
+  slug        String    @unique
   title       String
   description String
   body        String
   tagList     String[]
-  author      User     @relation("UserArticles", fields: [authorId], references: [id])
+  author      User      @relation("UserArticles", fields: [authorId], references: [id])
   authorId    Int
-  favoritedBy User[]   @relation("UserFavorites", references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
+  favoritedBy User[]    @relation("UserFavorites", references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+  comment     Comment[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  body      String
+  article   Article  @relation(fields: [articleId], references: [id])
+  articleId Int
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }

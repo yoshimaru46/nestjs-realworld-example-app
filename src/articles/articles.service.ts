@@ -12,6 +12,14 @@ const articleAuthorSelect = {
   followedBy: { select: { id: true } },
 };
 
+const commentSelect = {
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  body: true,
+  author: { select: articleAuthorSelect },
+};
+
 const articleInclude = {
   author: { select: articleAuthorSelect },
   favoritedBy: { select: { id: true } },
@@ -145,6 +153,22 @@ export class ArticlesService {
     article = mapDynamicValues(userId, article);
 
     return { article };
+  }
+
+  async addComment(userId: number, slug: string, body: string): Promise<any> {
+    const comment = await this.prisma.comment.create({
+      data: {
+        body,
+        article: {
+          connect: { slug },
+        },
+        author: {
+          connect: { id: userId },
+        },
+      },
+      select: commentSelect,
+    });
+    return { comment };
   }
 
   private buildFindAllQuery(
