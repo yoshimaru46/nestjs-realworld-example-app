@@ -66,7 +66,8 @@ APIURL=http://localhost:3000/api ./run-api-tests.sh
 
 ## TODO
 
-- [ ] setup CI for postman specs
+- [x] setup CI for postman specs
+- [x] connect with frontend
 
 ## Support
 
